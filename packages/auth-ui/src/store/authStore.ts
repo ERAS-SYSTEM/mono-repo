@@ -25,6 +25,8 @@ export interface AuthState {
   checkAuth: () => Promise<void>;
   updateProfile: (data: ProfileUpdatePayload) => Promise<void>;
   changePassword: (oldPassword: string, newPassword: string) => Promise<void>;
+  forgotPassword: (email: string) => Promise<string>;
+  resetPassword: (token: string, newPassword: string) => Promise<string>;
 }
 
 const API_URL = "http://localhost:8000/api";
@@ -113,5 +115,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       { old_password: oldPassword, new_password: newPassword },
       { headers: { Authorization: `Bearer ${token}` } },
     );
+  },
+
+  forgotPassword: async (email) => {
+    const response = await axios.post(`${API_URL}/auth/forgot-password/`, { email });
+    return response.data.message ?? "If an account exists, reset link sent to email";
+  },
+
+  resetPassword: async (token, newPassword) => {
+    const response = await axios.post(`${API_URL}/auth/reset-password/`, {
+      token,
+      new_password: newPassword,
+    });
+    return response.data.message ?? "Password reset successful";
   },
 }));
