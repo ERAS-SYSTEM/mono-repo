@@ -1,0 +1,9 @@
+{
+  "name": "@contact-keeper/api",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "python manage.py runserver",
+    "start": "python manage.py runserver"
+  }
+}
