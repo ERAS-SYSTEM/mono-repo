@@ -3,8 +3,12 @@
   "private": true,
   "version": "1.0.0",
   "packageManager": "pnpm@10.6.5",
+  "pnpm": {
+    "onlyBuiltDependencies": ["better-sqlite3", "esbuild"]
+  },
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=@contact-keeper/auth --filter=@contact-keeper/contact-keeper --filter=@contact-keeper/auth-ui --filter=@repo/api",
+    "dev:python-api": "turbo run dev --filter=@contact-keeper/api",
     "build": "turbo run build",
     "lint": "turbo run lint",
     "clean": "turbo run clean"

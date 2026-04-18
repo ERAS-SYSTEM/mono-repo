@@ -29,7 +29,7 @@ export interface AuthState {
   resetPassword: (token: string, newPassword: string) => Promise<string>;
 }
 
-const API_URL = "http://localhost:8000/api";
+const API_URL = "/api";
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,

@@ -1,6 +1,13 @@
 node_modules/
 .pnpm-store/
 
+# Turborepo
+.turbo/
+
+# Build outputs
+dist/
+.next/
+
 # Logs
 *.log
 npm-debug.log*
