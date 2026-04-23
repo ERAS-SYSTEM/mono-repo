@@ -1,7 +1,14 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
-from .models import User
+from .models import Contact, User
+
+
+class ContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Contact
+        fields = ("id", "name", "email", "phone", "type", "created_at")
+        read_only_fields = ("id", "created_at")
 
 
 class RegisterSerializer(serializers.ModelSerializer):

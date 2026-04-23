@@ -5,15 +5,35 @@ from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import PasswordResetToken, User
+from .models import Contact, PasswordResetToken, User
 from .serializers import (
     ChangePasswordSerializer,
+    ContactSerializer,
     ForgotPasswordSerializer,
     RegisterSerializer,
     ResetPasswordSerializer,
     UpdateProfileSerializer,
     UserSerializer,
 )
+
+
+class ContactListCreateView(generics.ListCreateAPIView):
+    serializer_class = ContactSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return self.request.user.contacts.all().order_by("-created_at")
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class ContactDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = ContactSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return self.request.user.contacts.all()
 
 
 class RegisterView(generics.CreateAPIView):

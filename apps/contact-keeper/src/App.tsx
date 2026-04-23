@@ -1,33 +1,79 @@
-import { ContactKeeperStatusPanel } from "@repo/feature-y";
+import React, { useEffect, useState } from "react";
+import { useAuthStore, LoginForm, SignupForm } from "@contact-keeper/auth-ui";
+import { ContactList, ContactForm, Contact } from "@contact-keeper/contacts-ui";
+import "./styles.css";
 
 export function App() {
-  return (
-    <div className="container">
-      <header className="header">
-        <div>
-          <h1 className="title">Contact Keeper</h1>
-          <p className="subtitle">
-            Assembled from <code>@repo/feature-y</code>. API calls go to <code>/api/*</code> and are
-            proxied to <code>localhost:3005</code> in dev.
-          </p>
-        </div>
-        <span className="badge">Vite app · port 5174</span>
-      </header>
+  const { user, checkAuth, logout, isLoading } = useAuthStore();
+  const [currentContact, setCurrentContact] = useState<Contact | null>(null);
+  const [showSignup, setShowSignup] = useState(false);
 
-      <div className="grid">
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  if (isLoading && !user) {
+    return <div className="loading">Initializing...</div>;
+  }
+
+  if (!user) {
+    return (
+      <div className="auth-container">
         <div className="card">
-          <ContactKeeperStatusPanel healthUrl="/api/health" />
-        </div>
-        <aside className="card">
-          <h2>Quick links</h2>
-          <p className="subtitle">
-            Node API:{" "}
-            <a className="link" href="http://localhost:3005/api/health" target="_blank" rel="noreferrer">
-              /api/health
-            </a>
+          <h1 className="title" style={{ textAlign: "center" }}>{showSignup ? "Create Account" : "Welcome Back"}</h1>
+          <p className="subtitle" style={{ textAlign: "center" }}>
+            {showSignup ? "Join Contact Keeper today" : "Sign in to manage your contacts"}
           </p>
-        </aside>
+          
+          {showSignup ? (
+             <>
+               <SignupForm />
+               <p style={{ textAlign: "center", marginTop: "1.5rem", color: "var(--text-muted)" }}>
+                 Already have an account?{" "}
+                 <button onClick={() => setShowSignup(false)} style={{ background: "none", border: "none", color: "var(--primary)", cursor: "pointer", fontWeight: 600 }}>
+                   Login
+                 </button>
+               </p>
+             </>
+          ) : (
+            <>
+              <LoginForm />
+              <p style={{ textAlign: "center", marginTop: "1.5rem", color: "var(--text-muted)" }}>
+                Don't have an account?{" "}
+                <button onClick={() => setShowSignup(true)} style={{ background: "none", border: "none", color: "var(--primary)", cursor: "pointer", fontWeight: 600 }}>
+                  Sign up
+                </button>
+              </p>
+            </>
+          )}
+        </div>
       </div>
+    );
+  }
+
+  return (
+    <div className="app-container">
+      <nav className="navbar">
+        <a href="#" className="logo">Contact Keeper</a>
+        <div className="nav-links">
+          <span>Hello, <strong>{user.username}</strong></span>
+          <button onClick={logout} className="btn btn-outline" style={{ padding: "0.5rem 1rem" }}>Logout</button>
+        </div>
+      </nav>
+
+      <main className="main-grid">
+        <aside>
+          <ContactForm 
+            currentContact={currentContact} 
+            onSuccess={() => setCurrentContact(null)} 
+          />
+        </aside>
+
+        <section>
+          <h2 className="title" style={{ fontSize: "1.5rem", marginBottom: "1.5rem" }}>Your Contacts</h2>
+          <ContactList onEdit={(contact) => setCurrentContact(contact)} />
+        </section>
+      </main>
     </div>
   );
 }
