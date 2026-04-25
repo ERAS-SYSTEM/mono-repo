@@ -39,7 +39,7 @@ export function App() {
             <>
               <LoginForm />
               <p style={{ textAlign: "center", marginTop: "1.5rem", color: "var(--text-muted)" }}>
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <button onClick={() => setShowSignup(true)} style={{ background: "none", border: "none", color: "var(--primary)", cursor: "pointer", fontWeight: 600 }}>
                   Sign up
                 </button>

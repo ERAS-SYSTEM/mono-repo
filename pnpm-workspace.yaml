@@ -1,12 +1,4 @@
 packages:
-  - "apps/auth"
-  - "apps/contact-keeper"
-  - "apps/api"
-  - "packages/auth-ui"
-  - "packages/shared"
-  - "packages/ui-components"
-  - "packages/utils"
-  - "packages/feature-x"
-  - "packages/feature-y"
-  - "packages/db"
-  - "packages/api"
+  - "apps/*"
+  - "packages/*"
+
